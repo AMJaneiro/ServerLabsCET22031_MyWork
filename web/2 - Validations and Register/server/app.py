@@ -52,77 +52,30 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-def get_db_session():
-    db_session = db.SessionLocal()
-    try:
-        yield db_session
-    finally:
-        db_session.close()
+# def get_db_session():
+#     db_session = db.SessionLocal()
+#     try:
+#         yield db_session
+#     finally:
+#         db_session.close()
+# #:
+
+@app.post('/register')
+async def register(player: str):
+    pass "XPTO"
+
 #:
 
-@app.post('/register', response_model = sch.PlayerRegisterResult)
-async def register(
-        player: sch.PlayerRegister,
-        db_session: Session = Depends(get_db_session),
-):
-    tourn_id = player.tournament_id
-    if tourn_id is None:
-        error = ErrorCode.ERR_UNSPECIFIED_TOURNAMENT
-        raise HTTPException(status_code = 400, detail=error.details())
-
-    db_player = crud.get_player_by_email(db_session, player.email)
-    if not db_player:
-        db_player = crud.create_player(db_session, player)
-
-    if db_player.tournament_id == tourn_id:
-        error = ErrorCode.ERR_PLAYER_ALREADY_ENROLLED
-        raise HTTPException(status_code=400, detail=error.details(tourn_id = tourn_id))
-
-    if crud.get_tournament_by_id(db_session, tourn_id) is None:
-        error = ErrorCode.ERR_UNKNOWN_TOURNAMENT_ID
-        raise HTTPException(status_code = 404, detail=error.details(tourn_id = tourn_id))
-
-    crud.update_player_tournament(db_session, db_player, tourn_id)
-
-    return db_player
-#:
-
-################################################################################
+#####################################################################
 
 def main():
     import uvicorn
-    from docopt import docopt
-    help_doc = """
-A Web accessible FastAPI server that allow players to register/enroll
-for tournaments.
 
-Usage:
-  app.py [-c | -c -d] [-p PORT] [-h HOST_IP]
-
-Options:
-  -p PORT, --port=PORT          Listen on this port [default: 8000]
-  -c, --create-ddl              Crea    te datamodel in the database
-  -d, --populate-db             Populate the DB with dummy for testing purposes
-  -h HOST_IP, --host=HOST_IP    Listen on this IP address [default: 127.0.0.1]
-"""
-    args = docopt(help_doc)
-    create_ddl = args['--create-ddl']
-    populate_db = args['--populate-db']
-    if create_ddl:
-        db.create_metadata()
-        if populate_db:
-            models.populate_db()
-        #:
-    #:
-
-    uvicorn.run(
-        'app:app',
-        port = int(args['--port']), 
-        host = args['--host'],
-        reload = True,
-    )
+    uvicorn.run('app:app', reload=True)
 #:
 
 if __name__ == '__main__':
     main()
 #:
+
+
