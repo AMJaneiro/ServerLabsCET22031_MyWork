@@ -54,16 +54,25 @@ app.add_middleware(
 
 # def get_db_session():
 #     db_session = db.SessionLocal()
-#     try:
+#     try: 
 #         yield db_session
 #     finally:
 #         db_session.close()
 # #:
 
 @app.post('/register')
-async def register(player: str):
-    return "XPTO" 
+async def register(player: sch.PlayerRegister) -> sch.PlayerRegisterResult:
+    tourn_id = player.tournament_id
+    if tourn_id is None:
+        raise HTTPException(status_code = )
 
+
+    return sch.PlayerRegisterResult(
+        id = 1105,
+        full_name = player.full_name,
+        email = player.email,
+    )
+    
 #:
 
 #####################################################################

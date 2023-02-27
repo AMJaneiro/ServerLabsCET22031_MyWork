@@ -69,7 +69,7 @@ class PlayerRegisterResult(PlayerBase):
 class ErrorCode(Enum):
     ERR_UNSPECIFIED_TOURNAMENT = 'Missing tournament id.'
     ERR_PLAYER_ALREADY_ENROLLED = 'Player already enrolled in tournament'
-    ERR_UNKNOWN_TOURNAMENT_ID = 'Unknown tournament id'
+    ERR_UNKNOWN_TOURNAMENT_ID = 'Unknown tournament id'  
 
     def details(self, **kargs) -> dict:
         details_dict = {'error_code': self.name, 'error_msg': self.value}
