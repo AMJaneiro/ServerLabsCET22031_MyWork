@@ -64,8 +64,11 @@ app.add_middleware(
 async def register(player: sch.PlayerRegister) -> sch.PlayerRegisterResult:
     tourn_id = player.tournament_id
     if tourn_id is None:
-        raise HTTPException(status_code = )
-
+        detail = {
+            'error_code': 'ERR_UNSPECIFIED_TOURNAMENT', 
+            'error_mesg': 'Missing tournament id'
+        }
+        raise HTTPException(status_code = 400, detail = detail)    # 400 Bad Request
 
     return sch.PlayerRegisterResult(
         id = 1105,
