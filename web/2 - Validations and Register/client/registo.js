@@ -37,34 +37,7 @@ window.addEventListener('load', function() {
     whenClick('submit', validateAndSubmitForm);
 });
 
-async function validateAndSubmitForm() {
-    if (!validateAllFields()) {
-        return;
-    }
-    try {
-        const [responseOK, responseData] = await registerPlayer();
-        const showStatusFn = responseOK ? showSuccess : showError;
-        showStatusFn(responseData);
-    } 
-    catch (error) {
-        showSubmissionInfo(`ERROR: An error has ocurred when connecting to server at ${URL}`, false);
-        console.error(error);
-    }
-}
 
-async function registerPlayer() {
-    const player = {
-        full_name     : bySel('[name=fullName]').value,
-        email         : bySel('[name=email]').value,
-        password      : bySel('[name=password]').value,
-        phone_number  : bySel('[name=phoneNumber]').value,
-        birth_date    : bySel('[name=birthDate]').value,
-        level         : bySel('[name=level]').value,
-        tournament_id : TOURNAMENT_ID,
-    };
-    const response = await byPOSTasJSON(`${URL}/register`, player);
-    return [response.ok, await response.json()];
-}
 
 /**
  * @param {Object} responseData 
